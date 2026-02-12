@@ -77,6 +77,7 @@
 Collection එකේ `{{baseUrl}}` variable එකක් use වෙනවා. මේක set කරන්න:
 
 **Option A: Collection Variables Use කරන්න (Default)**
+
 - Collection එකේම `baseUrl = http://localhost:8080` set වෙලා තියනවා
 - Application එක local එකේ run වෙනවනම් වෙනස් කරන්න එපා
 
@@ -142,6 +143,7 @@ Collection එකේ `{{baseUrl}}` variable එකක් use වෙනවා. �
 5. **Send Click කරන්න**
 
 6. **Response එක check කරන්න**
+
    ```json
    {
      "totalFiles": 3,
@@ -161,6 +163,7 @@ Collection එකේ `{{baseUrl}}` variable එකක් use වෙනවා. �
      ]
    }
    ```
+
    - ⚠️ **සියලු `savedFilename` values copy කරගන්න!**
 
 ---
@@ -173,11 +176,7 @@ Collection එකේ `{{baseUrl}}` variable එකක් use වෙනවා. �
 
 3. **Response එක check කරන්න**
    ```json
-   [
-     "a1b2c3d4-uuid1.jpg",
-     "b2c3d4e5-uuid2.png",
-     "c3d4e5f6-uuid3.jpg"
-   ]
+   ["a1b2c3d4-uuid1.jpg", "b2c3d4e5-uuid2.png", "c3d4e5f6-uuid3.jpg"]
    ```
 
 ---
@@ -218,12 +217,10 @@ Collection එකේ `{{baseUrl}}` variable එකක් use වෙනවා. �
 2. **Body tab open කරන්න**
 
 3. **Filenames update කරන්න**
+
    ```json
    {
-     "filenames": [
-       "a1b2c3d4-uuid1.jpg",
-       "b2c3d4e5-uuid2.png"
-     ]
+     "filenames": ["a1b2c3d4-uuid1.jpg", "b2c3d4e5-uuid2.png"]
    }
    ```
 
@@ -259,18 +256,17 @@ Collection එකේ `{{baseUrl}}` variable එකක් use වෙනවා. �
 2. **Body tab open කරන්න**
 
 3. **Delete කරන්න ඕනේ filenames දාන්න**
+
    ```json
    {
-     "filenames": [
-       "a1b2c3d4-uuid1.jpg",
-       "b2c3d4e5-uuid2.png"
-     ]
+     "filenames": ["a1b2c3d4-uuid1.jpg", "b2c3d4e5-uuid2.png"]
    }
    ```
 
 4. **Send Click කරන්න**
 
 5. **Response එක check කරන්න**
+
    ```json
    {
      "totalFiles": 2,
@@ -282,6 +278,7 @@ Collection එකේ `{{baseUrl}}` variable එකක් use වෙනවා. �
      }
    }
    ```
+
    - `true` = Successfully deleted
    - `false` = Deletion failed
 
@@ -327,7 +324,7 @@ Upload කරපු පසු filename save කරගන්න variable එක�
 // Tests tab එකේ දාන්න (Upload request එකේ)
 var jsonData = pm.response.json();
 if (jsonData.filename) {
-    pm.environment.set("lastUploadedFile", jsonData.filename);
+  pm.environment.set('lastUploadedFile', jsonData.filename);
 }
 ```
 
@@ -341,18 +338,20 @@ Batch upload කරපු පසු සියලු filenames save කරන්�
 // Tests tab එකේ දාන්න (Batch upload request එකේ)
 var jsonData = pm.response.json();
 var filenames = jsonData.results.map(r => r.savedFilename);
-pm.environment.set("uploadedFiles", JSON.stringify(filenames));
+pm.environment.set('uploadedFiles', JSON.stringify(filenames));
 ```
 
 ### 3. **Auto-Validate Test Scripts**
 
 Collection එකේම default test script එකක් තියනවා:
+
 - Automatically check කරනවා status code එක 200, 201, හෝ 204 ද කියලා
 - ඔබටත් custom tests add කරන්න පුළුවන්
 
 ### 4. **Environment Variables for Different Servers**
 
 Environments create කරන්න:
+
 - **Local:** `http://localhost:8080`
 - **Development:** `https://dev.your-domain.com`
 - **Production:** `https://api.your-domain.com`
@@ -366,6 +365,7 @@ Switch කරන්න එක environment එකෙන් තවත් environme
 ### Success Responses ඇතුළත් තියනවා!
 
 Collection එකේ ඇතැම් requests වල sample success responses included වෙලා තියනවා:
+
 - Upload Single Image - 201 Response
 - Upload Multiple Images - 201 Response with results
 - List All Images - 200 Response with array
@@ -379,26 +379,34 @@ Collection එකේ ඇතැම් requests වල sample success responses in
 ## 🐛 Troubleshooting
 
 ### Issue 1: "Could not get any response"
+
 **Solution:**
+
 - Application එක run වෙනවද බලන්න
 - URL එක correct ද බලන්න (`http://localhost:8080`)
 - Firewall settings check කරන්න
 
 ### Issue 2: "Max upload size exceeded"
+
 **Solution:**
+
 - File sizes check කරන්න
 - Single file: 10MB max
 - Total request: 50MB max
 - Reduce file sizes or upload in smaller batches
 
 ### Issue 3: "File not found" when downloading
+
 **Solution:**
+
 - Filename correct ද බලන්න (UUID format)
 - List all images first හරිද filenames හොයාගන්න
 - File delete වෙලා නැද්ද check කරන්න
 
 ### Issue 4: ZIP file corrupt or empty
+
 **Solution:**
+
 - "Send and Download" use කරන්න (normal "Send" නෙමෙයි)
 - Filenames array එකේ valid filenames තියනවද බලන්න
 - Files actually exist කරනවද verify කරන්න (List All use කරලා)
@@ -410,6 +418,7 @@ Collection එකේ ඇතැම් requests වල sample success responses in
 දැනට authentication එකක් නෑ. API එක public.
 
 Authentication add කරන්න ඕනේ නම්:
+
 1. Collection Variables එකට `apiKey` variable එකක් add කරන්න
 2. Authorization tab එක use කරන්න requests වලට
 3. Bearer Token හෝ API Key authentication implement කරන්න backend එකේ
