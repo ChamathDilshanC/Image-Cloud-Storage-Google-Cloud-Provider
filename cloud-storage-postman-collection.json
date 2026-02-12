@@ -1,0 +1,88 @@
+{
+  "info": {
+    "_postman_id": "cloud-storage-api",
+    "name": "Cloud Storage API",
+    "description": "Collection for testing Cloud Storage in Action API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Upload Image",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "image",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/images",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "images"]
+        },
+        "description": "Upload an image file to the cloud storage. Returns the saved filename."
+      },
+      "response": []
+    },
+    {
+      "name": "List All Images",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/images",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "images"]
+        },
+        "description": "Get a list of all uploaded image filenames."
+      },
+      "response": []
+    },
+    {
+      "name": "Get Image by Filename",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/images/{{filename}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "images", "{{filename}}"]
+        },
+        "description": "Retrieve a specific image by its filename. Replace {{filename}} with the actual filename."
+      },
+      "response": []
+    },
+    {
+      "name": "Delete Image",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/images/{{filename}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "images", "{{filename}}"]
+        },
+        "description": "Delete a specific image by its filename. Replace {{filename}} with the actual filename."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "filename",
+      "value": "example.jpg",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: cloud-storage-in-action
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+gcp:
+  project-id: your-gcp-project-id
+  credentials-location: /your-service-account-credentials.json
+  bucket-name: your-bucket-name
+  bucket-id: your-bucket-id
