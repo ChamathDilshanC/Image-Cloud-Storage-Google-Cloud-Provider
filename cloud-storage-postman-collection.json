@@ -1,88 +1,362 @@
 {
   "info": {
-    "_postman_id": "cloud-storage-api",
-    "name": "Cloud Storage API",
-    "description": "Collection for testing Cloud Storage in Action API endpoints",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "_postman_id": "cloud-storage-api-v2",
+    "name": "Cloud Storage API - Complete Collection",
+    "description": "Complete collection for testing Cloud Storage API with Single and Multiple Image Operations. Supports GCP Cloud Storage and Local Storage.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "2.0.0"
   },
   "item": [
     {
-      "name": "Upload Image",
-      "request": {
-        "method": "POST",
-        "header": [],
-        "body": {
-          "mode": "formdata",
-          "formdata": [
+      "name": "Single Image Operations",
+      "description": "CRUD operations for single images - upload one image at a time",
+      "item": [
+        {
+          "name": "Upload Single Image",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select a single image file (JPG, PNG, GIF, etc.)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/images",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "images"]
+            },
+            "description": "Upload a single image file to cloud storage.\n\n**Request:** Form-data with 'image' field\n**Response:** Returns the saved filename with UUID\n**Max Size:** 10MB per file"
+          },
+          "response": [
             {
-              "key": "image",
-              "type": "file",
-              "src": []
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/images",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "images"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"filename\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg\"\n}"
             }
           ]
         },
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/images",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "v1", "images"]
+        {
+          "name": "List All Images",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/images",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "images"]
+            },
+            "description": "Get a list of all uploaded image filenames in the storage.\n\n**Response:** Array of filenames"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/images",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "images"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  \"a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg\",\n  \"b2c3d4e5-f6a7-8901-bcde-f12345678901.png\",\n  \"c3d4e5f6-a7b8-9012-cdef-123456789012.jpg\"\n]"
+            }
+          ]
         },
-        "description": "Upload an image file to the cloud storage. Returns the saved filename."
-      },
-      "response": []
+        {
+          "name": "Get Single Image by Filename",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/images/{{filename}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "images", "{{filename}}"]
+            },
+            "description": "Download a specific image by its filename.\n\n**Path Parameter:** filename - The saved filename from upload response\n**Response:** Image file (binary)"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Single Image",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/images/{{filename}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "images", "{{filename}}"]
+            },
+            "description": "Delete a specific image by its filename.\n\n**Path Parameter:** filename - The saved filename to delete\n**Response:** 204 No Content"
+          },
+          "response": []
+        }
+      ]
     },
     {
-      "name": "List All Images",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/images",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "v1", "images"]
+      "name": "Multiple Images Operations (Batch)",
+      "description": "Batch operations for multiple images - upload, download, delete multiple images in single request",
+      "item": [
+        {
+          "name": "Upload Multiple Images (Batch)",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select first image file"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select second image file"
+                },
+                {
+                  "key": "images",
+                  "type": "file",
+                  "src": [],
+                  "description": "Select third image file - Add more rows as needed"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/images/batch",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "images", "batch"]
+            },
+            "description": "Upload multiple images in a single request.\n\n**Request:** Form-data with multiple 'images' fields\n**Response:** Details of each uploaded file with success/failure status\n**Max Size:** 10MB per file, 50MB total request\n\n**How to use in Postman:**\n1. Select 'Body' → 'form-data'\n2. Add multiple rows with key 'images' (File type)\n3. Select different image files for each row\n4. Send request"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/images/batch",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "images", "batch"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"totalFiles\": 3,\n  \"successCount\": 3,\n  \"failedCount\": 0,\n  \"results\": [\n    {\n      \"originalFilename\": \"photo1.jpg\",\n      \"savedFilename\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg\",\n      \"status\": \"success\"\n    },\n    {\n      \"originalFilename\": \"photo2.png\",\n      \"savedFilename\": \"b2c3d4e5-f6a7-8901-bcde-f12345678901.png\",\n      \"status\": \"success\"\n    },\n    {\n      \"originalFilename\": \"photo3.jpg\",\n      \"savedFilename\": \"c3d4e5f6-a7b8-9012-cdef-123456789012.jpg\",\n      \"status\": \"success\"\n    }\n  ]\n}"
+            }
+          ]
         },
-        "description": "Get a list of all uploaded image filenames."
-      },
-      "response": []
-    },
-    {
-      "name": "Get Image by Filename",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/images/{{filename}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "v1", "images", "{{filename}}"]
+        {
+          "name": "Download Multiple Images as ZIP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filenames\": [\n    \"a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg\",\n    \"b2c3d4e5-f6a7-8901-bcde-f12345678901.png\",\n    \"c3d4e5f6-a7b8-9012-cdef-123456789012.jpg\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/images/batch/retrieve",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "images", "batch", "retrieve"]
+            },
+            "description": "Download multiple images as a single ZIP file.\n\n**Request:** JSON body with array of filenames\n**Response:** ZIP file containing all requested images\n\n**How to use:**\n1. Replace filenames in the body with actual saved filenames\n2. Click 'Send and Download' to save the ZIP file\n3. Extract ZIP to get all images"
+          },
+          "response": []
         },
-        "description": "Retrieve a specific image by its filename. Replace {{filename}} with the actual filename."
-      },
-      "response": []
-    },
-    {
-      "name": "Delete Image",
-      "request": {
-        "method": "DELETE",
-        "header": [],
-        "url": {
-          "raw": "{{baseUrl}}/api/v1/images/{{filename}}",
-          "host": ["{{baseUrl}}"],
-          "path": ["api", "v1", "images", "{{filename}}"]
+        {
+          "name": "Get Multiple Images Info (Metadata)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filenames\": [\n    \"a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg\",\n    \"b2c3d4e5-f6a7-8901-bcde-f12345678901.png\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/images/batch/info",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "images", "batch", "info"]
+            },
+            "description": "Get metadata information for multiple images without downloading them.\n\n**Request:** JSON body with array of filenames\n**Response:** Details including file size, content type, and existence status\n\n**Use Case:** Check if files exist and get their properties before downloading"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/images/batch/info",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "images", "batch", "info"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"totalFiles\": 2,\n  \"filesInfo\": [\n    {\n      \"filename\": \"a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg\",\n      \"exists\": true,\n      \"size\": 245678,\n      \"contentType\": \"image/jpeg\"\n    },\n    {\n      \"filename\": \"b2c3d4e5-f6a7-8901-bcde-f12345678901.png\",\n      \"exists\": true,\n      \"size\": 189234,\n      \"contentType\": \"image/png\"\n    }\n  ]\n}"
+            }
+          ]
         },
-        "description": "Delete a specific image by its filename. Replace {{filename}} with the actual filename."
-      },
-      "response": []
+        {
+          "name": "Delete Multiple Images (Batch)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"filenames\": [\n    \"a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg\",\n    \"b2c3d4e5-f6a7-8901-bcde-f12345678901.png\",\n    \"c3d4e5f6-a7b8-9012-cdef-123456789012.jpg\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/images/batch",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "images", "batch"]
+            },
+            "description": "Delete multiple images in a single request.\n\n**Request:** JSON body with array of filenames to delete\n**Response:** Success/failure status for each file\n\n**Note:** Partial success is possible - some files may delete successfully while others fail"
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "DELETE",
+                "url": {
+                  "raw": "{{baseUrl}}/api/v1/images/batch",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "v1", "images", "batch"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"totalFiles\": 3,\n  \"successCount\": 3,\n  \"failedCount\": 0,\n  \"results\": {\n    \"a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg\": true,\n    \"b2c3d4e5-f6a7-8901-bcde-f12345678901.png\": true,\n    \"c3d4e5f6-a7b8-9012-cdef-123456789012.jpg\": true\n  }\n}"
+            }
+          ]
+        }
+      ]
     }
   ],
   "variable": [
     {
       "key": "baseUrl",
       "value": "http://localhost:8080",
-      "type": "string"
+      "type": "string",
+      "description": "Base URL for the API. Change to https://your-domain.com for production"
     },
     {
       "key": "filename",
-      "value": "example.jpg",
-      "type": "string"
+      "value": "a1b2c3d4-e5f6-7890-abcd-ef1234567890.jpg",
+      "type": "string",
+      "description": "Example filename variable. Replace with actual filename from upload response"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Pre-request script - runs before each request",
+          "console.log('Request to: ' + pm.request.url);"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Test script - runs after each request",
+          "pm.test('Status code is successful', function () {",
+          "    pm.response.to.have.status(200, 201, 204);",
+          "});"
+        ]
+      }
     }
   ]
 }
