@@ -1,14 +1,6 @@
-# Cloud Storage in Action
+# image-cloud-storage - Google Cloud Provider
 
-A Spring Boot REST API for image management that currently uses local file system storage. The goal of this project is to migrate it to use a **cloud object storage** service, transforming it into a cloud-enabled application.
-
-## About
-
-This project is part of the **Enterprise Cloud Application (ECA)** module in the **Higher Diploma in Software Engineering (HDSE)** program at the **Institute of Software Engineering (IJSE)**. It is intended exclusively for students enrolled in this program.
-
-## Objective
-
-As it stands, this application stores all uploaded images on the local machine (`~/.ijse/eca/storage`). Your task is to **clone this repository** and migrate the storage layer so that it uses a cloud object storage provider (e.g., AWS S3, Google Cloud Storage, Azure Blob Storage), making the application fully cloud-enabled.
+A Spring Boot REST API for image management with cloud object storage integration.
 
 ## Tech Stack
 
