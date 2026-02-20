@@ -1,373 +1,377 @@
-# Image Cloud Storage - Frontend
+# Image Cloud Storage - Backend API
 
-A modern Next.js web application for managing cloud-stored images. This frontend provides an intuitive user interface for uploading, viewing, and managing images stored in Google Cloud Platform.
+A Spring Boot REST API for image management with Google Cloud Platform storage integration. This project provides robust endpoints for uploading, retrieving, listing, and deleting images stored in Google Cloud Storage.
 
-## 📋 Table of Contents
+## 📋 Overview
 
-- [Tech Stack](#-tech-stack)
-- [Features](#-features)
-- [Getting Started](#-getting-started)
-- [Project Structure](#-project-structure)
-- [Available Scripts](#-available-scripts)
-- [Configuration](#-configuration)
-- [Development](#-development)
+This backend service demonstrates enterprise-level cloud architecture with RESTful APIs, enabling scalable image storage management using Google Cloud Platform.
 
-## 🛠️ Tech Stack
+## 🏗️ Architecture
 
-- **Framework**: Next.js 16.1.6
-- **Library**: React 19.2.3
-- **Language**: TypeScript 5
-- **Styling**: Tailwind CSS 4
-- **Linting**: ESLint 9
-- **Build Tool**: Next.js built-in tooling
+- **Backend Framework**: Spring Boot 4.0.2 (Java 25)
+- **Cloud Storage**: Google Cloud Platform (GCP)
+- **Build Tool**: Maven
+- **API Design**: RESTful
 
 ## ✨ Features
 
-- ✅ Modern, responsive UI
-- ✅ Upload single or multiple images
-- ✅ View image gallery with metadata
-- ✅ Download images
-- ✅ Delete images
-- ✅ Real-time upload progress
-- ✅ Image preview before upload
-- ✅ Drag-and-drop support
-- ✅ Mobile-friendly design
-- ✅ PWA support via manifest
+- ✅ Upload images to Google Cloud Storage
+- ✅ List all stored images with metadata
+- ✅ Retrieve specific images by filename
+- ✅ Delete images from cloud storage
+- ✅ RESTful API design
+- ✅ Cloud-native storage integration
+- ✅ Service abstraction for easy storage provider switching
+- ✅ Configurable file size limits
+
+## 📁 Project Structure
+
+```
+Image-Cloud-Storage/
+├── src/
+│   ├── main/
+│   │   ├── java/lk/ijse/eca/cloud_storage/
+│   │   │   ├── CloudStorageInActionApplication.java  # Main application
+│   │   │   ├── controller/
+│   │   │   │   └── ImageController.java              # REST endpoints
+│   │   │   └── service/
+│   │   │       ├── StorageService.java               # Service interface
+│   │   │       └── impl/
+│   │   │           ├── CloudStorageService.java      # GCP implementation
+│   │   │           └── FileStorageService.java       # Local storage impl
+│   │   └── resources/
+│   │       ├── application.yaml                      # Configuration
+│   │       ├── application.yaml.example              # Config template
+│   │       └── enterprise-cloud-architecture-*.json  # GCP credentials
+│   └── test/                                         # Unit tests
+├── backend/                                          # Additional backend docs
+│   └── README.md                                     # Detailed backend guide
+├── pom.xml                                           # Maven dependencies
+├── cloud-storage-postman-collection.json             # API testing collection
+├── SETUP.md                                          # GCP setup guide
+└── README.md                                         # This file
+```
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- **Node.js**: 20.x or higher
-- **npm**: 10.x or higher
-- **Backend API**: Must be running on `http://localhost:8080`
+- **Java 25** or higher
+- **Maven 3.8+**
+- **Google Cloud Platform account** (with Storage API enabled)
+- **GCP Service Account** with Storage permissions
+- **Service Account JSON key**
 
-### Installation
+### Installation & Setup
 
-1. **Navigate to frontend directory**
-
-   ```bash
-   cd frontend
-   ```
-
-2. **Install dependencies**
+1. **Clone the repository**
 
    ```bash
-   npm install
+   git clone <repository-url>
+   cd Image-Cloud-Storage
    ```
 
-3. **Configure environment variables** (if needed)
+2. **Configure Google Cloud Platform credentials**
 
-   Create `.env.local` file:
-   ```env
-   NEXT_PUBLIC_API_URL=http://localhost:8080
-   ```
+   ⚠️ **Important**: You must configure your own GCP credentials before running.
 
-4. **Run development server**
+   📖 **See [SETUP.md](SETUP.md) for detailed step-by-step configuration instructions.**
+
+   **Quick Summary**:
+   - Copy `src/main/resources/application.yaml.example` to `application.yaml`
+   - Download your GCP service account JSON key
+   - Place the key file in `src/main/resources/`
+   - Update `application.yaml` with:
+     - Your GCP project ID
+     - Your storage bucket name
+     - Path to your credentials JSON file
+
+3. **Build the project**
 
    ```bash
-   npm run dev
+   ./mvnw clean install
    ```
 
-5. **Open your browser**
+   Or on Windows:
 
-   Navigate to [http://localhost:3000](http://localhost:3000)
+   ```cmd
+   mvnw.cmd clean install
+   ```
+
+4. **Run the application**
+
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+
+   Or on Windows:
+
+   ```cmd
+   mvnw.cmd spring-boot:run
+   ```
+
+The application will start on **`http://localhost:8080`**
 
 ### Verify Installation
 
-You should see:
-- Upload section at the top
-- Image gallery below
-- Ability to select and upload images
-
-## 📁 Project Structure
-
-```
-frontend/
-├── app/
-│   ├── globals.css          # Global styles
-│   ├── layout.tsx           # Root layout component
-│   └── page.tsx             # Home page
-├── components/
-│   ├── ImageGrid.tsx        # Image gallery component
-│   └── UploadSection.tsx    # Upload UI component
-├── lib/
-│   └── api.ts               # API client functions
-├── public/
-│   └── manifest.json        # PWA manifest
-├── .env.local               # Environment variables (create this)
-├── next.config.ts           # Next.js configuration
-├── tsconfig.json            # TypeScript configuration
-├── tailwind.config.ts       # Tailwind CSS configuration
-├── postcss.config.mjs       # PostCSS configuration
-├── eslint.config.mjs        # ESLint configuration
-├── package.json             # Dependencies and scripts
-└── README.md                # This file
-```
-
-## 📜 Available Scripts
-
-### Development
+Once running, test the API:
 
 ```bash
-npm run dev
+curl http://localhost:8080/api/v1/images
 ```
 
-Starts the development server at `http://localhost:3000` with hot-reload enabled.
+Expected response: Empty array `[]` (if no images uploaded yet)
 
-### Production Build
+## 📡 API Endpoints
+
+| Method   | Endpoint                    | Description               | Request Type        |
+| -------- | --------------------------- | ------------------------- | ------------------- |
+| `POST`   | `/api/v1/images`            | Upload an image           | multipart/form-data |
+| `GET`    | `/api/v1/images`            | List all stored images    | -                   |
+| `GET`    | `/api/v1/images/{filename}` | Retrieve a specific image | -                   |
+| `DELETE` | `/api/v1/images/{filename}` | Delete a specific image   | -                   |
+
+### API Usage Examples
+
+#### Upload Image
 
 ```bash
-npm run build
+curl -X POST http://localhost:8080/api/v1/images \
+  -F "image=@/path/to/image.jpg"
 ```
 
-Creates an optimized production build in the `.next` directory.
-
-### Start Production Server
+#### List All Images
 
 ```bash
-npm run start
+curl http://localhost:8080/api/v1/images
 ```
 
-Runs the production build (requires `npm run build` first).
-
-### Linting
+#### Get Specific Image
 
 ```bash
-npm run lint
+curl http://localhost:8080/api/v1/images/image.jpg --output image.jpg
 ```
 
-Runs ESLint to check code quality and style.
+#### Delete Image
+
+```bash
+curl -X DELETE http://localhost:8080/api/v1/images/image.jpg
+```
+
+## 🧪 Testing with Postman
+
+A complete Postman collection is included for easy API testing.
+
+### 📥 Import Postman Collection
+
+**Collection File**: [`cloud-storage-postman-collection.json`](cloud-storage-postman-collection.json)
+
+**Import Methods**:
+
+1. **Via Postman UI**:
+   - Open Postman
+   - Click "Import" button (top-left)
+   - Click "Choose Files"
+   - Select `cloud-storage-postman-collection.json`
+   - Click "Import"
+
+2. **Via Drag & Drop**:
+   - Drag `cloud-storage-postman-collection.json` into Postman window
+
+### What's Included in the Collection
+
+- ✅ Upload Image
+- ✅ List All Images
+- ✅ Get Image by Filename
+- ✅ Delete Image
+- ✅ Pre-configured environment variables
+
+### Collection Variables
+
+The collection includes these variables:
+
+- `baseUrl`: `http://localhost:8080` (API base URL)
+- `filename`: `example.jpg` (placeholder for testing)
+
+You can modify these in Postman's environment settings.
+
+## 🛠️ Technology Stack
+
+### Backend
+
+- **Framework**: Spring Boot 4.0.2
+- **Language**: Java 25
+- **Build Tool**: Maven
+- **Cloud SDK**: Google Cloud Storage Libraries (v26.74.0)
+- **Utilities**: Lombok
+
+### Dependencies
+
+```xml
+<!-- Main Dependencies -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.google.cloud</groupId>
+    <artifactId>google-cloud-storage</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+</dependency>
+```
 
 ## 🔧 Configuration
 
-### Environment Variables
+### Main Configuration File
 
-Create a `.env.local` file in the frontend directory:
+**Location**: `src/main/resources/application.yaml`
 
-```env
-# API Base URL
-NEXT_PUBLIC_API_URL=http://localhost:8080
+```yaml
+spring:
+  application:
+    name: cloud-storage-in-action
+  servlet:
+    multipart:
+      max-file-size: 10MB # Maximum size per individual file
+      max-request-size: 50MB # Maximum total request size
 
-# Optional: Enable debug mode
-NEXT_PUBLIC_DEBUG=false
+gcp:
+  project-id: your-gcp-project-id
+  bucket-name: your-storage-bucket-name
+  credentials-path: src/main/resources/your-service-account-key.json
 ```
 
-### API Integration
+### Configuration Options
 
-The frontend connects to the backend API. Ensure the backend is running before using the frontend.
+#### File Upload Limits
 
-**Default API endpoint**: `http://localhost:8080/api/v1/images`
+To allow larger files, update these values in `application.yaml`:
 
-To change the API URL, update the environment variable or modify [`lib/api.ts`](lib/api.ts).
-
-### Next.js Configuration
-
-Custom configuration can be added to [`next.config.ts`](next.config.ts):
-
-```typescript
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  // Your custom configuration
-  images: {
-    domains: ['localhost'], // Add allowed image domains
-  },
-};
-
-export default nextConfig;
+```yaml
+spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB # Increase file size limit
+      max-request-size: 100MB # Increase request size limit
 ```
 
-## 💻 Development Guide
+#### GCP Configuration
 
-### Component Structure
+- `project-id`: Your Google Cloud project ID
+- `bucket-name`: Name of your Cloud Storage bucket
+- `credentials-path`: Path to your service account JSON key file
 
-#### 1. Upload Section (`components/UploadSection.tsx`)
+## 🏗️ Service Architecture
 
-Handles:
-- File selection (single or multiple)
-- Drag-and-drop functionality
-- Upload progress display
-- File validation
-
-#### 2. Image Grid (`components/ImageGrid.tsx`)
-
-Handles:
-- Displaying images in a responsive grid
-- Image metadata display
-- Download functionality
-- Delete functionality
-
-#### 3. API Client (`lib/api.ts`)
-
-Provides functions for:
-- `uploadImage(file)` - Upload single image
-- `uploadImages(files)` - Upload multiple images
-- `listImages()` - Fetch all images
-- `downloadImage(filename)` - Download specific image
-- `deleteImage(filename)` - Delete specific image
-
-### Adding New Features
-
-1. **Add new API function** to `lib/api.ts`
-2. **Create or update component** in `components/`
-3. **Import and use** in `app/page.tsx`
-4. **Style with Tailwind** CSS classes
-
-### Styling with Tailwind CSS
-
-Tailwind CSS 4 is configured. Use utility classes:
-
-```tsx
-<div className="flex items-center justify-center p-4 bg-blue-500 rounded-lg">
-  Content
-</div>
-```
-
-Custom styles can be added to `app/globals.css`.
-
-## 🎨 UI/UX Features
-
-- **Responsive Design**: Works on mobile, tablet, and desktop
-- **Drag & Drop**: Drag files directly into upload area
-- **Loading States**: Visual feedback during uploads
-- **Error Handling**: User-friendly error messages
-- **Toast Notifications**: Success/error notifications
-- **Image Preview**: Preview images before upload
-- **Grid Layout**: Responsive image gallery
-
-## 🧪 Testing
-
-### Manual Testing
-
-1. **Upload Single Image**
-   - Click "Choose File" or drag image
-   - Verify upload progress
-   - Check image appears in gallery
-
-2. **Upload Multiple Images**
-   - Select multiple files
-   - Verify all images upload
-   - Check gallery updates
-
-3. **Download Image**
-   - Click download button on image
-   - Verify file downloads
-
-4. **Delete Image**
-   - Click delete button
-   - Confirm deletion
-   - Verify image removed from gallery
-
-### Integration Testing
-
-Ensure backend is running and accessible before testing frontend features.
-
-## 📦 Dependencies
-
-### Production Dependencies
-
-```json
-{
-  "next": "16.1.6",
-  "react": "19.2.3",
-  "react-dom": "19.2.3"
-}
-```
-
-### Development Dependencies
-
-```json
-{
-  "@tailwindcss/postcss": "^4",
-  "@types/node": "^20",
-  "@types/react": "^19.2.14",
-  "@types/react-dom": "^19.2.3",
-  "eslint": "^9",
-  "eslint-config-next": "16.1.6",
-  "tailwindcss": "^4",
-  "typescript": "^5"
-}
-```
-
-## 🚀 Deployment
-
-### Deploy to Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Import project in [Vercel](https://vercel.com)
-3. Configure environment variables
-4. Deploy!
-
-### Deploy to Other Platforms
-
-Build the production bundle:
-
-```bash
-npm run build
-npm run start
-```
-
-The app will run on port 3000 by default.
-
-### Environment Variables for Production
-
-Set these in your hosting platform:
+The application uses clean architecture with service abstraction:
 
 ```
-NEXT_PUBLIC_API_URL=https://your-api-domain.com
+ImageController (REST Layer)
+    ↓
+StorageService (Interface)
+    ↓
+┌─────────────────────┬─────────────────────┐
+↓                     ↓                     ↓
+CloudStorageService   FileStorageService    (Future implementations)
+(GCP Implementation)  (Local Implementation)
 ```
+
+This design allows easy switching between storage providers without changing the controller logic.
+
+## 📚 Documentation
+
+- **[README.md](README.md)** - This file - Project overview
+- **[backend/README.md](backend/README.md)** - Detailed backend documentation
+- **[SETUP.md](SETUP.md)** - GCP configuration guide
+- **[Postman Collection](cloud-storage-postman-collection.json)** - API testing collection
 
 ## 🐛 Troubleshooting
 
-### "Cannot connect to API"
+### Common Issues
 
-**Solution**: 
-- Ensure backend is running on `http://localhost:8080`
-- Check `NEXT_PUBLIC_API_URL` in `.env.local`
-- Verify CORS is enabled on backend
+#### 1. "Application failed to start" or "Credentials not found"
 
-### "Module not found" errors
+**Solution**: Ensure your `application.yaml` is properly configured with valid GCP credentials.
 
-**Solution**:
-```bash
-rm -rf node_modules package-lock.json
-npm install
+- Check [SETUP.md](SETUP.md) for configuration steps
+- Verify service account JSON key is in the correct location
+- Ensure credentials path in `application.yaml` is correct
+
+#### 2. "403 Forbidden" when uploading files
+
+**Solution**: Check your GCP service account permissions.
+
+- Ensure service account has "Storage Object Creator" role
+- Verify your bucket exists and is accessible
+
+#### 3. "Max upload size exceeded"
+
+**Solution**: Increase file size limits in `application.yaml`:
+
+```yaml
+spring:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 100MB
 ```
 
-### Port 3000 already in use
+#### 4. Maven build fails
 
 **Solution**:
+
+- Ensure Java 25 is installed: `java -version`
+- Try: `./mvnw clean install -U` (force update dependencies)
+
+## 🚀 Deployment
+
+### Building for Production
+
 ```bash
-# Run on different port
-PORT=3001 npm run dev
+./mvnw clean package -DskipTests
 ```
 
-### Build errors
+This creates an executable JAR in `target/cloud-storage-in-action-0.0.1-SNAPSHOT.jar`
 
-**Solution**:
+### Running the Production JAR
+
 ```bash
-# Clear Next.js cache
-rm -rf .next
-npm run build
+java -jar target/cloud-storage-in-action-0.0.1-SNAPSHOT.jar
 ```
 
-## 🔗 Related Documentation
+### Running with Custom Configuration
 
-- **Backend API**: See [`../backend/README.md`](../backend/README.md)
-- **API Testing**: See [`../POSTMAN_GUIDE.md`](../POSTMAN_GUIDE.md)
-- **Setup Guide**: See [`../SETUP.md`](../SETUP.md)
+```bash
+java -jar target/cloud-storage-in-action-0.0.1-SNAPSHOT.jar \
+  --spring.config.location=file:/path/to/application.yaml
+```
 
-## 📚 Resources
+## 🧪 Running Tests
 
-- [Next.js Documentation](https://nextjs.org/docs)
-- [React Documentation](https://react.dev)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [TypeScript Documentation](https://www.typescriptlang.org/docs)
+```bash
+./mvnw test
+```
+
+## 🔐 Security Notes
+
+⚠️ **IMPORTANT**: Never commit your actual credentials to version control!
+
+- The `.gitignore` file excludes:
+  - `application.yaml`
+  - Any JSON files matching the pattern `*-*.json` in resources directories
+
+- Always keep your service account credentials secure
+- Use environment-specific configurations for different environments
+- Consider using secret management services for production
 
 ## 🤝 Contributing
 
-1. Create feature branch
+This is an educational project. Follow these steps for contributions:
+
+1. Create a feature branch
 2. Make your changes
 3. Test thoroughly
 4. Submit for review
@@ -378,6 +382,6 @@ Educational project - IJSE (Institute of Software Engineering)
 
 ---
 
-**Made with ❤️ using Next.js & React**
+**Made with ❤️ using Spring Boot & Google Cloud Storage**
 
-**Need Help?** Check the backend API documentation or contact via Slack.
+**Questions?** Check [SETUP.md](SETUP.md) or [backend/README.md](backend/README.md) for detailed guides.

@@ -20,7 +20,7 @@ A Spring Boot REST API for image management with Google Cloud Platform storage i
 - **Build Tool**: Maven
 - **Cloud Provider**: Google Cloud Platform (GCP)
 - **Storage**: Google Cloud Storage
-- **Libraries**: 
+- **Libraries**:
   - Lombok (Boilerplate reduction)
   - Google Cloud Storage Libraries (v26.74.0)
   - Spring Boot DevTools (Development)
@@ -107,6 +107,7 @@ backend/
    ```
 
    Or on Windows:
+
    ```cmd
    mvnw.cmd clean install
    ```
@@ -118,6 +119,7 @@ backend/
    ```
 
    Or on Windows:
+
    ```cmd
    mvnw.cmd spring-boot:run
    ```
@@ -138,21 +140,21 @@ Expected response: Empty array `[]` (if no images uploaded yet)
 
 ### Single Image Operations
 
-| Method   | Endpoint                    | Description               | Request Type  |
-| -------- | --------------------------- | ------------------------- | ------------- |
+| Method   | Endpoint                    | Description               | Request Type        |
+| -------- | --------------------------- | ------------------------- | ------------------- |
 | `POST`   | `/api/v1/images`            | Upload an image           | multipart/form-data |
-| `GET`    | `/api/v1/images`            | List all stored images    | -             |
-| `GET`    | `/api/v1/images/{filename}` | Retrieve a specific image | -             |
-| `DELETE` | `/api/v1/images/{filename}` | Delete a specific image   | -             |
+| `GET`    | `/api/v1/images`            | List all stored images    | -                   |
+| `GET`    | `/api/v1/images/{filename}` | Retrieve a specific image | -                   |
+| `DELETE` | `/api/v1/images/{filename}` | Delete a specific image   | -                   |
 
 ### Multiple Images Operations (Batch) 🎉
 
-| Method   | Endpoint                        | Description                    | Request Type        |
-| -------- | ------------------------------- | ------------------------------ | ------------------- |
-| `POST`   | `/api/v1/images/batch`          | Upload multiple images         | multipart/form-data |
-| `POST`   | `/api/v1/images/batch/retrieve` | Download multiple images as ZIP| JSON                |
-| `POST`   | `/api/v1/images/batch/info`     | Get metadata for multiple files| JSON                |
-| `DELETE` | `/api/v1/images/batch`          | Delete multiple images         | JSON                |
+| Method   | Endpoint                        | Description                     | Request Type        |
+| -------- | ------------------------------- | ------------------------------- | ------------------- |
+| `POST`   | `/api/v1/images/batch`          | Upload multiple images          | multipart/form-data |
+| `POST`   | `/api/v1/images/batch/retrieve` | Download multiple images as ZIP | JSON                |
+| `POST`   | `/api/v1/images/batch/info`     | Get metadata for multiple files | JSON                |
+| `DELETE` | `/api/v1/images/batch`          | Delete multiple images          | JSON                |
 
 ### API Usage Examples
 
@@ -261,8 +263,8 @@ spring:
     name: cloud-storage-in-action
   servlet:
     multipart:
-      max-file-size: 10MB      # Maximum size per individual file
-      max-request-size: 50MB   # Maximum total request size (for batch uploads)
+      max-file-size: 10MB # Maximum size per individual file
+      max-request-size: 50MB # Maximum total request size (for batch uploads)
 
 gcp:
   project-id: your-gcp-project-id
@@ -283,7 +285,7 @@ gcp:
 spring:
   servlet:
     multipart:
-      max-file-size: 20MB    # Allow up to 20MB per file
+      max-file-size: 20MB # Allow up to 20MB per file
       max-request-size: 100MB # Allow up to 100MB total per request
 ```
 
@@ -344,6 +346,7 @@ This design allows easy switching between storage providers without changing the
 #### 1. "Application failed to start" or "Credentials not found"
 
 **Solution**: Ensure your `application.yaml` is properly configured with valid GCP credentials.
+
 - Check [SETUP.md](SETUP.md) for configuration steps
 - Verify your service account JSON key is in the correct location
 - Ensure the credentials path in `application.yaml` is correct
@@ -351,12 +354,14 @@ This design allows easy switching between storage providers without changing the
 #### 2. "403 Forbidden" when uploading files
 
 **Solution**: Check your GCP service account permissions.
+
 - Ensure the service account has "Storage Object Creator" role
 - Verify your bucket exists and is accessible
 
 #### 3. "Max upload size exceeded"
 
 **Solution**: Increase file size limits in `application.yaml`:
+
 ```yaml
 spring:
   servlet:
@@ -368,6 +373,7 @@ spring:
 #### 4. Maven build fails
 
 **Solution**:
+
 - Ensure Java 25 is installed: `java -version`
 - Try: `./mvnw clean install -U` (force update dependencies)
 
